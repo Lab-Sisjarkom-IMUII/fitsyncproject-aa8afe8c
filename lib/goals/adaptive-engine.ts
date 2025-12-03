@@ -25,7 +25,7 @@ export class AdaptiveGoalsEngine {
     const baseGoals = this.calculateBaseGoals(userId);
 
     // Apply adaptive adjustments
-    const adaptedGoals = this.applyAdaptiveAdjustments(baseGoals, behaviorPatterns, historicalData);
+    const adaptedGoals = this.applyAdaptiveAdjustments(userId, date, baseGoals, behaviorPatterns, historicalData);
 
     // Store with metadata
     await this.storeDailyGoals(userId, date, adaptedGoals, behaviorPatterns);
@@ -151,6 +151,8 @@ export class AdaptiveGoalsEngine {
    * Apply adaptive adjustments to base goals
    */
   private static applyAdaptiveAdjustments(
+    userId: string,
+    date: Date,
     baseGoals: { steps: number; caloriesBurned: number; sleepHours: number; },
     patterns: BehaviorPatterns,
     historicalData: TimeAggregate[]
@@ -259,7 +261,9 @@ export class AdaptiveGoalsEngine {
           streak: patterns.overGoalStreak,
           difficulty: this.estimateDifficulty(newStepsTarget, avgSteps),
           historicalAverage: avgSteps,
-          trend: patterns.performanceTrend
+          trend: patterns.performanceTrend === 'improving' ? 'increasing' :
+                 patterns.performanceTrend === 'declining' ? 'decreasing' :
+                 'stable'
         },
         caloriesBurned: {
           target: newCaloriesTarget,
@@ -268,7 +272,9 @@ export class AdaptiveGoalsEngine {
           streak: 0, // To be calculated based on actual performance
           difficulty: this.estimateDifficulty(newCaloriesTarget, avgCalories),
           historicalAverage: avgCalories,
-          trend: patterns.performanceTrend
+          trend: patterns.performanceTrend === 'improving' ? 'increasing' :
+                 patterns.performanceTrend === 'declining' ? 'decreasing' :
+                 'stable'
         },
         sleepHours: {
           target: newSleepTarget,
@@ -277,7 +283,9 @@ export class AdaptiveGoalsEngine {
           streak: 0, // To be calculated based on actual performance
           difficulty: this.estimateDifficulty(newSleepTarget, baseGoals.sleepHours),
           historicalAverage: baseGoals.sleepHours, // Sleep base is typically the average
-          trend: patterns.performanceTrend
+          trend: patterns.performanceTrend === 'improving' ? 'increasing' :
+                 patterns.performanceTrend === 'declining' ? 'decreasing' :
+                 'stable'
         }
       },
       metadata: {

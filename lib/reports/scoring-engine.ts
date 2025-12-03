@@ -434,5 +434,3 @@ export class ScoringEngine {
     return { slope, percentageChange };
   }
 }
-
-export { ScoringEngine };

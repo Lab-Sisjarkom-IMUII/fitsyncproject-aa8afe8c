@@ -10,6 +10,7 @@ import InsightBarChart from '@/components/insights/BarChart';
 import MetricCard from '@/components/insights/MetricCard';
 import InsightCard from '@/components/insights/InsightCard';
 import { Flame, Utensils, Target } from 'lucide-react';
+import { Line } from 'recharts';
 
 interface NutritionTabProps {
   userId?: string;
@@ -134,19 +135,21 @@ const NutritionTab: React.FC<NutritionTabProps> = ({ userId }) => {
             title="Calories In"
             color="#00FFAA"
           >
-            <line
+            <Line
               type="monotone"
               dataKey="caloriesOut"
               stroke="#FF6B6B"
               name="Calories Out"
               strokeWidth={2}
+              yAxisId="right"
             />
-            <line
+            <Line
               type="monotone"
               dataKey="netCalories"
               stroke="#4FB3FF"
               name="Net Calories"
               strokeWidth={2}
+              yAxisId="right"
             />
           </InsightLineChart>
         </InsightCard>
@@ -159,12 +162,13 @@ const NutritionTab: React.FC<NutritionTabProps> = ({ userId }) => {
             color="#FFA726"
           >
             {chartData.some((d: any) => d.mealQualityTrend > 0) && (
-              <line
+              <Line
                 type="monotone"
                 dataKey="mealQualityTrend"
                 stroke="#BA68C8"
                 name="Meal Quality Trend"
                 strokeWidth={2}
+                yAxisId="right"
               />
             )}
           </InsightBarChart>

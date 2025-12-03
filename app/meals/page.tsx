@@ -126,7 +126,8 @@ export default function MealsPage() {
 
       // Save to unified store
       const userId = session.username;
-      const unifiedRecord = {
+      // Type the unified record explicitly to match WellnessRecord interface
+      const unifiedRecord: Omit<import('@/data/models/wellness-record').WellnessRecord, 'id'> = {
         userId,
         timestamp: new Date(),
         type: 'meal',
@@ -297,7 +298,8 @@ Calories: ${calories} kcal`;
 
           // Save to unified store
           const userId = session.username;
-          const unifiedRecord = {
+          // Type the unified record explicitly to match WellnessRecord interface
+          const unifiedRecord: Omit<import('@/data/models/wellness-record').WellnessRecord, 'id'> = {
             userId,
             timestamp: new Date(),
             type: 'meal',

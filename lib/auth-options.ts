@@ -1,9 +1,9 @@
-import NextAuth from 'next-auth'
+import type { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { validateUser, findUserByEmail, createUser, createGoogleUser } from '@/lib/users'
+import { validateUser, findUserByEmail, createGoogleUser } from '@/lib/users'
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -15,7 +15,7 @@ export const authOptions = {
         // Validate credentials against the database
         if (credentials?.username && credentials?.password) {
           const user = await validateUser(credentials.username, credentials.password);
-          
+
           if (user) {
             return {
               id: user.id,
@@ -44,16 +44,16 @@ export const authOptions = {
         token.googleId = profile.sub; // Google's user ID
         token.name = profile.name;
         token.email = profile.email;
-        token.image = profile.picture;
+        token.image = (profile as any).picture || (profile as any).image; // Handle different profile formats
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.image;
+        (session.user as any).id = token.id;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.image = token.image as string;
       }
       return session;
     },
@@ -92,6 +92,3 @@ export const authOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET || 'secret'
 }
-
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }

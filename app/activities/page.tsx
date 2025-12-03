@@ -52,10 +52,11 @@ export default function ActivitiesPage() {
 
       // Save to unified store
       const userId = session.username;
-      const unifiedRecord = {
+      // Type the unified record explicitly to match WellnessRecord interface
+      const unifiedRecord: Omit<import('@/data/models/wellness-record').WellnessRecord, 'id'> = {
         userId,
         timestamp: new Date(activity.date || Date.now()),
-        type: 'activity',
+        type: 'activity', // Fixed: Use fixed 'activity' type
         category: activity.type,
         metrics: {
           duration: activity.duration,

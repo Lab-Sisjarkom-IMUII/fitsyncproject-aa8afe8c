@@ -125,7 +125,9 @@ const TrendCard = ({
                 }}
                 formatter={(value, name, props) => {
                   // Use the index from the payload to find the corresponding original value
-                  const originalValue = data[props.dataIndex]?.value;
+                  // Note: Recharts payload may have different property names in newer versions
+                  const payload = props as any; // Type assertion for compatibility
+                  const originalValue = data[payload.dataIndex]?.value;
                   return [originalValue, title];
                 }}
               />

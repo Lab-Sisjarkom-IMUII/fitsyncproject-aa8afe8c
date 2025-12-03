@@ -241,8 +241,8 @@ const getAllUsers = async (): Promise<User[]> => {
   }));
 };
 
+export type { User };
 export {
-  User,
   createUser,
   createGoogleUser,
   findUser,

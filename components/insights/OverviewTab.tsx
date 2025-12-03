@@ -10,6 +10,7 @@ import InsightBarChart from '@/components/insights/BarChart';
 import MetricCard from '@/components/insights/MetricCard';
 import InsightCard from '@/components/insights/InsightCard';
 import { Flame, Footprints, Moon, TrendingUp, Target, Activity } from 'lucide-react';
+import { Line } from 'recharts';
 
 interface OverviewTabProps {
   userId?: string;
@@ -138,12 +139,13 @@ const OverviewTab: React.FC<OverviewTabProps> = ({ userId }) => {
             color="#00FFAA"
           >
             {chartData.some((d: any) => d.xp > 0) && (
-              <line
+              <Line
                 type="monotone"
                 dataKey="xp"
                 stroke="#4FB3FF"
                 name="XP"
                 strokeWidth={2}
+                yAxisId="right"
               />
             )}
           </InsightLineChart>

@@ -10,6 +10,7 @@ import InsightBarChart from '@/components/insights/BarChart';
 import MetricCard from '@/components/insights/MetricCard';
 import InsightCard from '@/components/insights/InsightCard';
 import { Footprints, Flame, TrendingUp, Activity } from 'lucide-react';
+import { Line } from 'recharts';
 
 interface ActivityTabProps {
   userId?: string;
@@ -125,12 +126,13 @@ const ActivityTab: React.FC<ActivityTabProps> = ({ userId }) => {
             color="#00FFAA"
           >
             {chartData.some((d: any) => d.xp > 0) && (
-              <line
+              <Line
                 type="monotone"
                 dataKey="xp"
                 stroke="#4FB3FF"
                 name="XP"
                 strokeWidth={2}
+                yAxisId="right"
               />
             )}
           </InsightBarChart>

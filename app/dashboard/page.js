@@ -19,6 +19,7 @@ import MiniCharts from '@/components/dashboard/MiniCharts'
 import DailyCardSummary from '@/components/dashboard/DailyCardSummary'
 import TrendCardGrid from '@/components/dashboard/TrendCardGrid';
 import { useTrendData } from '@/hooks/useTrendData';
+import InstallPWAButton from '@/components/pwa/InstallPWAButton';
 
 export default function DashboardPage() {
   console.log('[DASHBOARD PAGE] Component mounted, current path:', typeof window !== 'undefined' ? window.location.pathname : 'server');
@@ -373,6 +374,7 @@ export default function DashboardPage() {
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-20">
         <DashboardHeader />
+        <InstallPWAButton />
         {/* Hero Metrics Section */}
         {stats.steps === 0 && stats.calories === 0 && stats.sleep === 0 ? (
           <div className="mb-6 p-6 bg-[#161B22] border border-[#30363D] rounded-2xl text-center">

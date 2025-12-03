@@ -1,5 +1,4 @@
 import { TimeAggregate } from '@/data/models/wellness-record';
-import { UnifiedStore } from '../storage/unified-store';
 
 /**
  * Data models for adaptive goals
@@ -54,10 +53,8 @@ interface BehaviorPatterns {
 type AdaptationReason = 'consistency_improvement' | 'performance_decline' | 
   'fatigue_detection' | 'maintenance_mode' | 'streak_compensation';
 
-export {
-  DailyGoals,
-  GoalMetric,
-  GoalDelta,
-  BehaviorPatterns,
-  AdaptationReason
-};
+export type { DailyGoals };
+export type { GoalMetric };
+export type { GoalDelta };
+export type { BehaviorPatterns };
+export type { AdaptationReason };

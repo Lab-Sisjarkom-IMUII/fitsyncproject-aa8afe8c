@@ -60,6 +60,13 @@ const InsightBarChart: React.FC<Props> = ({
             <YAxis
               stroke="#8B949E"
               tick={{ fill: '#8B949E' }}
+              yAxisId="left"
+            />
+            <YAxis
+              stroke="#4FB3FF"
+              tick={{ fill: '#4FB3FF' }}
+              orientation="right"
+              yAxisId="right"
             />
             <Tooltip
               contentStyle={{

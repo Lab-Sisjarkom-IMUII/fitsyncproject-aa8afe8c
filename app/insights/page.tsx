@@ -279,7 +279,7 @@ export default function WeeklyInsightsPage() {
     );
   }
 
-  if (!session && status !== 'loading') {
+  if (!session && status === 'unauthenticated') {
     return null;
   }
 

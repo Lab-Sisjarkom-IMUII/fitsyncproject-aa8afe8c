@@ -10,6 +10,7 @@ import InsightBarChart from '@/components/insights/BarChart';
 import MetricCard from '@/components/insights/MetricCard';
 import InsightCard from '@/components/insights/InsightCard';
 import { Moon, TrendingUp, Activity } from 'lucide-react';
+import { Line } from 'recharts';
 
 interface SleepTabProps {
   userId?: string;
@@ -123,12 +124,13 @@ const SleepTab: React.FC<SleepTabProps> = ({ userId }) => {
             color="#7C3AED"
           >
             {chartData.some((d: any) => d.sleepScore > 0) && (
-              <line
+              <Line
                 type="monotone"
                 dataKey="sleepScore"
                 stroke="#FFA726"
                 name="Sleep Score"
                 strokeWidth={2}
+                yAxisId="right"
               />
             )}
           </InsightBarChart>
