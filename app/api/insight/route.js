@@ -1,4 +1,7 @@
 // app/api/insight/route.js
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request) {

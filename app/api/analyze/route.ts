@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { NextRequest } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai'; // Install: npm install @google/generative-ai
 

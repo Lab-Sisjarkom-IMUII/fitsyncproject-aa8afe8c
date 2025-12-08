@@ -1,4 +1,7 @@
 // app/api/ai/weekly-summary/route.ts
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { NextRequest, NextResponse } from "next/server";
 import { askAI } from "@/lib/aiService";
 import { prompts } from "@/lib/aiPrompts";

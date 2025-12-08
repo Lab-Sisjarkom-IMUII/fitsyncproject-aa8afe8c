@@ -1,4 +1,5 @@
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 // Array of motivational messages
 const motivationalMessages = [

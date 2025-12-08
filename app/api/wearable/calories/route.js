@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // Simulate wearable calories data
 export async function GET(request) {
   try {

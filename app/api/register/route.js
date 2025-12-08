@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { createUser, validateUser } from '@/lib/users';
 
 export async function POST(request) {
