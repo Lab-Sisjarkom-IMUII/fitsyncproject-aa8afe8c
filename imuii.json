@@ -1,0 +1,11 @@
+{
+  "name": "fitsyc-web",
+  "framework": "nextjs",
+  "language": "typescript",
+  "buildCommand": "next build",
+  "startCommand": "next start",
+  "domain": "fitsync-web",
+  "email": "syarifhidayatullahh886@gmail.com",
+  "secretKey": "imuii_e3323681c7557abcc79e7ca791049a06c325e36b100bf9397b6c3c4fd201d931",
+  "repoUrl": "https://github.com/Lab-Sisjarkom-IMUII/fitsync-web-ef1efbef.git"
+}
