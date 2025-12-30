@@ -1,11 +1,11 @@
-import ClientSafeUnifiedStore from '@/lib/storage/client-safe-unified-store';
+import ClientSafeUnifiedStore from './client-safe-unified-store';
 import { TimeAggregate, WellnessRecord } from '@/data/models/wellness-record';
 
 /**
- * Unified aggregator for insights page
- * Gathers data from all wellness categories using the unified storage system
+ * Client-safe unified aggregator for insights page
+ * Gathers data from all wellness categories using the client-safe unified storage system
  */
-class UnifiedAggregator {
+class ClientSafeUnifiedAggregator {
   // Cache to store ongoing requests to prevent duplicate calls
   private static ongoingRequests = new Map<string, Promise<any>>();
 
@@ -16,6 +16,7 @@ class UnifiedAggregator {
     const dateStr = date ? date.toISOString().split('T')[0] : 'default';
     return `${userId}:${type}:${dateStr}`;
   }
+
   /**
    * Get aggregated data for insights page
    */
@@ -781,4 +782,4 @@ class UnifiedAggregator {
   }
 }
 
-export default UnifiedAggregator;
+export default ClientSafeUnifiedAggregator;

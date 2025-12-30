@@ -1,4 +1,4 @@
-import UnifiedStore from '@/lib/storage/unified-store';
+import ClientSafeUnifiedStore from '@/lib/storage/client-safe-unified-store';
 import { getWeeklyStats } from '@/lib/storage/unified-aggregator-wrapper';
 
 interface StreakData {
@@ -82,14 +82,14 @@ class XpSystem {
 
     console.log(`[XP SYSTEM] Base XP: ${xpAmount}, Multiplier: ${bonusMultiplier}, Total XP: ${bonusXP}`);
 
-    return await UnifiedStore.addXP(userId, bonusXP);
+    return await ClientSafeUnifiedStore.addXP(userId, bonusXP);
   }
 
   /**
    * Get user's total XP from unified storage
    */
   static async getXp(userId: string): Promise<number> {
-    return await UnifiedStore.getXp(userId);
+    return await ClientSafeUnifiedStore.getXp(userId);
   }
 
   /**

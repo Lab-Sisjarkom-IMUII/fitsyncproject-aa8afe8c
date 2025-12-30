@@ -1,5 +1,5 @@
 import { WellnessRecord } from '@/data/models/wellness-record';
-import UnifiedStore from '@/lib/storage/unified-store';
+import ClientSafeUnifiedStore from '@/lib/storage/client-safe-unified-store';
 import { CorrelationCalculator } from './correlation-calculator';
 
 // Type definitions
@@ -62,7 +62,7 @@ export class InsightFusionEngine {
     const endDate = new Date(weekStart);
     endDate.setDate(weekStart.getDate() + 6);
 
-    const records = await UnifiedStore.getRecordsForPeriod(userId, weekStart, endDate);
+    const records = await ClientSafeUnifiedStore.getRecordsForPeriod(userId, weekStart, endDate);
     
     // Separate by type
     const meals = records.filter(r => r.type === 'meal');
@@ -142,8 +142,8 @@ export class InsightFusionEngine {
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - 30);
 
-    const records = await UnifiedStore.getRecordsForPeriod(userId, startDate, endDate);
-    
+    const records = await ClientSafeUnifiedStore.getRecordsForPeriod(userId, startDate, endDate);
+
     // Separate by type
     const meals = records.filter(r => r.type === 'meal');
     const sleepRecords = records.filter(r => r.type === 'sleep');
@@ -260,13 +260,13 @@ export class InsightFusionEngine {
     const startDate = new Date();
     startDate.setDate(endDate.getDate() - daysToAnalyze);
 
-    const records = await UnifiedStore.getRecordsForPeriod(userId, startDate, endDate);
-    
+    const records = await ClientSafeUnifiedStore.getRecordsForPeriod(userId, startDate, endDate);
+
     // Separate by type
-    const meals = records.filter(r => r.type === 'meal').sort((a, b) => 
+    const meals = records.filter(r => r.type === 'meal').sort((a, b) =>
       new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
-    const sleepRecords = records.filter(r => r.type === 'sleep').sort((a, b) => 
+    const sleepRecords = records.filter(r => r.type === 'sleep').sort((a, b) =>
       new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
 

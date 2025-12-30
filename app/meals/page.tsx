@@ -146,8 +146,8 @@ export default function MealsPage() {
       };
 
       // Add to unified store
-      const { default: UnifiedStore } = await import('@/lib/storage/unified-store');
-      await UnifiedStore.addRecord(userId, unifiedRecord);
+      const { default: ClientSafeUnifiedStore } = await import('@/lib/storage/client-safe-unified-store');
+      await ClientSafeUnifiedStore.addRecord(userId, unifiedRecord);
 
       // Dispatch storage event to update dashboard in real-time
       window.dispatchEvent(new StorageEvent('storage', {
@@ -317,8 +317,8 @@ Calories: ${calories} kcal`;
           };
 
           // Add to unified store
-          const { default: UnifiedStore } = await import('@/lib/storage/unified-store');
-          await UnifiedStore.addRecord(userId, unifiedRecord);
+          const { default: ClientSafeUnifiedStore } = await import('@/lib/storage/client-safe-unified-store');
+          await ClientSafeUnifiedStore.addRecord(userId, unifiedRecord);
 
           // Dispatch storage event to update dashboard in real-time
           window.dispatchEvent(new StorageEvent('storage', {

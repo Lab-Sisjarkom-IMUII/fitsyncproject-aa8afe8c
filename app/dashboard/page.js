@@ -99,8 +99,10 @@ export default function DashboardPage() {
         profileWeight: profile?.weight
       });
 
-      if (!profile || !profile.onboardingCompleted || !profile.name || !profile.age || !profile.gender || !profile.height || !profile.weight) {
-        console.log('[DASHBOARD] Onboarding not completed or required fields missing, redirecting to onboarding', {
+      // Only redirect to onboarding if profile doesn't exist at all OR onboarding is not completed
+      // Don't redirect if user has already completed onboarding, even if some optional fields are missing
+      if (!profile || !profile.onboardingCompleted) {
+        console.log('[DASHBOARD] Profile missing or onboarding not completed, redirecting to onboarding', {
           profileExists: !!profile,
           onboardingCompleted: profile?.onboardingCompleted,
           hasName: !!profile?.name,

@@ -60,6 +60,13 @@ const InsightLineChart: React.FC<Props> = ({
             <YAxis
               stroke="#8B949E"
               tick={{ fill: '#8B949E' }}
+              yAxisId="left"
+            />
+            <YAxis
+              stroke="#4FB3FF"
+              tick={{ fill: '#4FB3FF' }}
+              orientation="right"
+              yAxisId="right"
             />
             <Tooltip
               contentStyle={{
@@ -74,6 +81,7 @@ const InsightLineChart: React.FC<Props> = ({
               type="monotone"
               dataKey={dataKey}
               stroke={color}
+              yAxisId="left"
               activeDot={{ r: 8 }}
               isAnimationActive={false} // Disable animation for empty data
             />

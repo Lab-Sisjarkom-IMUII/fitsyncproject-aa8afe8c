@@ -1,10 +1,15 @@
 const CACHE_NAME = "fitsync-cache-v1";
+const STATIC_CACHE_NAME = "fitsync-static-v1";
+const API_CACHE_NAME = "fitsync-api-v1";
+
 const urlsToCache = [
   "/",
   "/offline",
   "/manifest.json",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png"
+  "/icons/icon-192.jpg",
+  "/icons/icon-512.jpg",
+  "/_next/static/css/app.css",
+  "/_next/static/chunks/main.js"
 ];
 
 // Don't cache NextAuth routes
@@ -15,13 +20,29 @@ const AUTH_IGNORE = [
   '/api/auth/providers'
 ];
 
+// Don't cache API routes that should always be fresh
+const API_IGNORE = [
+  '/api/user-data',
+  '/api/insights',
+  '/api/ai',
+  '/api/reminder'
+];
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        console.log("Opened cache");
-        return cache.addAll(urlsToCache);
-      })
+    Promise.all([
+      caches.open(STATIC_CACHE_NAME)
+        .then((cache) => {
+          console.log("Static cache opened");
+          return cache.addAll(urlsToCache);
+        }),
+      caches.open(API_CACHE_NAME)
+        .then((cache) => {
+          console.log("API cache opened");
+          // Pre-populate API cache with minimal data
+          return cache.put('/offline', new Response('Offline', { status: 200 }));
+        })
+    ])
   );
 });
 
@@ -30,20 +51,71 @@ self.addEventListener("fetch", (event) => {
 
   // Don't cache NextAuth routes
   if (AUTH_IGNORE.some(path => url.includes(path))) {
-    // bypass service worker — let the browser handle it
+    event.respondWith(fetch(event.request));
     return;
   }
 
   // Also exclude auth and onboarding pages to prevent caching issues
-  if (event.request.url.includes('/auth') || event.request.url.includes('/onboarding')) return;
+  if (event.request.url.includes('/auth') || event.request.url.includes('/onboarding')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
 
+  // Handle API routes with different strategies
+  if (event.request.url.includes('/api/')) {
+    // Check if it's an API route that should not be cached
+    if (API_IGNORE.some(path => url.includes(path))) {
+      // Network-first strategy for critical API data
+      event.respondWith(
+        fetch(event.request)
+          .then(networkResponse => {
+            // Clone the response to put in cache for fallback
+            const responseClone = networkResponse.clone();
+
+            // Update API cache for future fallback
+            caches.open(API_CACHE_NAME)
+              .then(cache => cache.put(event.request, responseClone));
+
+            return networkResponse;
+          })
+          .catch(() => {
+            // If network fails, try cache
+            return caches.match(event.request)
+              .then(response => response || caches.match('/offline'));
+          })
+      );
+    } else {
+      // Cache-first strategy for other API routes
+      event.respondWith(
+        caches.match(event.request)
+          .then(cachedResponse => {
+            return cachedResponse || fetch(event.request)
+              .then(networkResponse => {
+                // Update cache with fresh response
+                const responseClone = networkResponse.clone();
+                caches.open(API_CACHE_NAME)
+                  .then(cache => cache.put(event.request, responseClone));
+                return networkResponse;
+              })
+              .catch(() => {
+                // If both fail, serve offline page
+                return caches.match('/offline');
+              });
+          })
+      );
+    }
+  }
   // Check if the request is for navigation
-  if (event.request.mode === "navigate") {
+  else if (event.request.mode === "navigate") {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          // If the response is successful, return it
+          // If the response is successful, return it and update cache
           if (response.status === 200) {
+            // Clone and cache the response for offline access
+            const responseClone = response.clone();
+            caches.open(STATIC_CACHE_NAME)
+              .then(cache => cache.put(event.request, responseClone));
             return response;
           }
 
@@ -65,7 +137,7 @@ self.addEventListener("fetch", (event) => {
         })
     );
   } else {
-    // For other requests (images, scripts, etc.), use cache-first strategy
+    // For other requests (images, scripts, stylesheets), use cache-first strategy
     event.respondWith(
       caches.match(event.request)
         .then((cachedResponse) => {
@@ -73,6 +145,7 @@ self.addEventListener("fetch", (event) => {
           if (cachedResponse) {
             return cachedResponse;
           }
+
           return fetch(event.request)
             .then((networkResponse) => {
               // Cache network response if it's valid
@@ -80,7 +153,7 @@ self.addEventListener("fetch", (event) => {
                   networkResponse.type === 'basic' &&
                   event.request.destination !== 'document') {
                 const responseToCache = networkResponse.clone();
-                caches.open(CACHE_NAME)
+                caches.open(STATIC_CACHE_NAME)
                   .then((cache) => {
                     cache.put(event.request, responseToCache);
                   });
@@ -101,7 +174,7 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
+          if (cacheName !== STATIC_CACHE_NAME && cacheName !== API_CACHE_NAME) {
             console.log("Deleting old cache:", cacheName);
             return caches.delete(cacheName);
           }

@@ -80,6 +80,7 @@ const InsightBarChart: React.FC<Props> = ({
             <Bar
               dataKey={dataKey}
               fill={color}
+              yAxisId="left"
               isAnimationActive={false}
               radius={[4, 4, 0, 0]}
             />

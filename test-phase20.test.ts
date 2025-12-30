@@ -9,7 +9,7 @@ vi.mock('./lib/storage/unified-aggregator-wrapper', () => ({
 }));
 
 // Mock the unified-store
-vi.mock('./lib/storage/unified-store', () => ({
+vi.mock('./lib/storage/client-safe-unified-store', () => ({
   default: {
     addXP: vi.fn(),
     getXp: vi.fn(),
@@ -173,8 +173,8 @@ describe('Phase 20 Feature Tests', () => {
       });
 
       // Mock UnifiedStore to track XP addition
-      const { default: UnifiedStore } = await import('./lib/storage/unified-store');
-      (UnifiedStore.addXP as MockedFunction<any>).mockResolvedValue(110); // 100 base + 10% bonus = 110
+      const { default: ClientSafeUnifiedStore } = await import('./lib/storage/client-safe-unified-store');
+      (ClientSafeUnifiedStore.addXP as MockedFunction<any>).mockResolvedValue(110); // 100 base + 10% bonus = 110
 
       const result = await XpSystem.addXP(mockUserId, baseXP);
       

@@ -47,8 +47,8 @@ export class AdaptiveGoalsEngine {
       date.setDate(currentDate.getDate() - i);
 
       // Import dynamically to avoid circular dependency
-      const { default: UnifiedStore } = await import('../storage/unified-store');
-      const dailyData = await UnifiedStore.getDailyAggregatedData(userId, date);
+      const { default: ClientSafeUnifiedStore } = await import('../storage/client-safe-unified-store');
+      const dailyData = await ClientSafeUnifiedStore.getDailyAggregatedData(userId, date);
       historicalData.push(dailyData);
     }
 

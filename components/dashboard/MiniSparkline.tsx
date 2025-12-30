@@ -8,7 +8,48 @@ interface MiniSparklineProps {
   height?: number;
 }
 
-const MiniSparkline = ({ data, color = '#00FFAA', height = 60 }: MiniSparklineProps) => {
+const MiniSparkline = ({ data = [], color = '#00FFAA', height = 60 }: MiniSparklineProps) => {
+  // Handle empty data case
+  if (!data || data.length === 0) {
+    // Create dummy data for empty state
+    const emptyData = Array(7).fill(0).map((_, i) => ({
+      date: `Day ${i + 1}`,
+      value: 0
+    }));
+
+    return (
+      <div className="w-full h-full">
+        <ResponsiveContainer width="100%" height={height}>
+          <AreaChart data={emptyData}>
+            <defs>
+              <linearGradient id={`colorGradient-${color}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={color} stopOpacity={0.3}/>
+                <stop offset="95%" stopColor={color} stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <XAxis
+              dataKey="date"
+              hide={true}
+            />
+            <YAxis
+              domain={[0, 100]}
+              hide={true}
+            />
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke={color}
+              fill={`url(#colorGradient-${color})`}
+              strokeWidth={2}
+              dot={false}
+              activeDot={{ r: 0 }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  }
+
   // Calculate min and max values for normalization
   const values = data.map(item => item.value);
   const minValue = Math.min(...values);

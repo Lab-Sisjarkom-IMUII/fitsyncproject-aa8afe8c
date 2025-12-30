@@ -19,6 +19,19 @@ export default function AuthCallbackPage() {
         name: session.user.name || session.user.email
       });
 
+      // Migrate local data to server after successful Google login
+      if (typeof window !== 'undefined') {
+        try {
+          const userId = session.user.email || session.user.name;
+          const migrateLocalToServer = (await import('@/lib/storage/storage-sync')).default;
+          await migrateLocalToServer(userId);
+          console.log('Local data migration initiated after Google login');
+        } catch (migrationError) {
+          console.error('Error during data migration:', migrationError);
+          // Continue with normal flow even if migration fails
+        }
+      }
+
       // Check if user has completed onboarding
       const profile = getUserProfile();
       if (!profile?.onboardingCompleted) {

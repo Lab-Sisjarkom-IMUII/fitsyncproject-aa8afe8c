@@ -111,7 +111,19 @@ export default function LoginPage() {
       
       // Wait briefly to ensure session is saved before redirect
       await new Promise(resolve => setTimeout(resolve, 100));
-      
+
+      // Migrate local data to server after successful login
+      if (typeof window !== 'undefined') {
+        try {
+          const migrateLocalToServer = (await import('@/lib/storage/storage-sync')).default;
+          await migrateLocalToServer(username);
+          console.log('Local data migration initiated after login');
+        } catch (migrationError) {
+          console.error('Error during data migration:', migrationError);
+          // Continue with normal flow even if migration fails
+        }
+      }
+
       if (!profile?.onboardingCompleted) {
         console.log('Redirecting to onboarding after login');
         router.push('/onboarding');
