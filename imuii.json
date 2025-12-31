@@ -2,8 +2,8 @@
   "name": "fitsync-web",
   "framework": "nextjs",
   "language": "typescript",
-  "buildCommand": "next build",
-  "startCommand": "next start",
+  "buildCommand": "npm run build",
+  "startCommand": "npm run start",
   "domain": "fitsync-web",
   "email": "syarifhidayatullahh886@gmail.com"
 }
