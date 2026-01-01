@@ -1,9 +1,11 @@
 {
-  "name": "fitsync-web",
+  "name": "fitsync-project",
   "framework": "nextjs",
   "language": "typescript",
   "buildCommand": "npm run build",
   "startCommand": "npm run start",
-  "domain": "fitsync-web",
-  "email": "syarifhidayatullahh886@gmail.com"
+  "domain": "fitsyncproject",
+  "email": "syarifhidayatullahh886@gmail.com",
+  "secretKey": "imuii_8e78822d6f3199054714eda31fa87f60f69f65af410a1205d68ed6054d339197",
+  "repoUrl": "https://github.com/Lab-Sisjarkom-IMUII/fitsyncproject-aa8afe8c.git"
 }
